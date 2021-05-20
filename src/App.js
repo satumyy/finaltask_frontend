@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Customerlist from './components/Customerlist';
 import Trainings from './components/Trainings';
+import CalendarPage from './components/CalendarPage';
 
 
 
@@ -27,11 +28,13 @@ function App() {
           <Tabs value={value} onChange={handleChange}>
             <Tab value="one" label="Customers" />
             <Tab value="two" label="Trainings"/>
+            <Tab value="three" label="Calendar"/>
           </Tabs>
         </Toolbar>
       </AppBar>
       {value===   'one'&&   <Customerlist />}
       {value===   'two'&&   <Trainings />}
+      {value===   'three'&&   <CalendarPage />}
     </div>
   );
 }
