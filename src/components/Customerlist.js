@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
 import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer';
 
@@ -12,6 +13,15 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 function Customerlist() {
 
   const [customers, setCustomers] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const openSnackbar = () => {
+    setOpen(true);
+  }
+
+  const closeSnackbar = () => {
+    setOpen(false);
+  }
 
   useEffect(() => {
     fetchCustomers();
@@ -28,10 +38,13 @@ function Customerlist() {
     if (window.confirm('Are you sure?')){
       fetch(url, { method: 'DELETE'})
       .then(response => {
-        if (response.ok)
+        if (response.ok){
+          openSnackbar();
           fetchCustomers();
-        else
+        }
+        else{
           alert('Something went wrong!');
+        }   
       })
       .catch(err => console.error(err))
     }
@@ -99,13 +112,19 @@ function Customerlist() {
     <div className="Customerlist">
         <AddCustomer addCustomer={addCustomer}/>
         <div className="ag-theme-material" style={{ height: 600, width: '90%', margin: 'auto', marginTop: 10}}>
-            <AgGridReact
+          <AgGridReact
             rowData={customers}
             columnDefs={columns}
             pagination={true}
             paginationPageSize={10}
-            />
-        </div> 
+          />
+        </div>
+        <Snackbar
+          open={open}
+          message="Customer deleted"
+          autoHideDuration={3000}
+          onClose={closeSnackbar}
+        />
     </div>
   );
 }

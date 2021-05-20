@@ -46,16 +46,13 @@ function EditTraining(props){
         setTraining({...training, [event.target.name] : event.target.value});
     }
 
-
-
-  
     return (
       <div>
         <IconButton color='primary' onClick={handleClickOpen}>
           <EditIcon />
         </IconButton> 
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Edit training with {props.training.customer.firstname}</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit training with {props.training.customer.firstname} {props.training.customer.lastname}</DialogTitle>
           <DialogContent>
             <DialogContentText>
             </DialogContentText>

@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
 import AddTraining from './AddTraining';
 import EditTraining from './EditTraining';
 
@@ -13,11 +14,19 @@ function Trainings() {
 
   const [trainings, setTrainings] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const openSnackbar = () => {
+    setOpen(true);
+  }
+
+  const closeSnackbar = () => {
+    setOpen(false);
+  }
 
   useEffect(() => {
     fetchTrainings();
     fetchCustomers();
-    console.log(trainings)
   }, []);
 
   const fetchTrainings = () => {
@@ -39,10 +48,13 @@ function Trainings() {
     if (window.confirm('Are you sure?')){
       fetch('https://customerrest.herokuapp.com/api/trainings/' + id, { method: 'DELETE'})
       .then(response => {
-        if (response.ok)
+        if (response.ok){
+          openSnackbar();
           fetchTrainings();
-        else
+        }
+        else{
           alert('Something went wrong!');
+        }
       })
       .catch(err => console.error(err))
     }
@@ -102,6 +114,7 @@ function Trainings() {
     {field: 'activity', sortable: true, filter: true },
     {field: 'duration', sortable: true, filter: true },
     {headerName: 'Customer', field: 'customer.firstname', sortable: true, filter: true },
+    {headerName: '', field: 'customer.lastname', sortable: true, filter: true },
     {
       headerName:'',
       field: 'id',
@@ -132,7 +145,13 @@ function Trainings() {
                 pagination={true}
                 paginationPageSize={10}
             />
-        </div> 
+        </div>
+        <Snackbar
+          open={open}
+          message="Training deleted"
+          autoHideDuration={3000}
+          onClose={closeSnackbar}
+        />
     </div>
   );
 }
